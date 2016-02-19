@@ -1,4 +1,6 @@
 {
+  "access": ["public", "private", "protected"],
+  "unexportIdentifier": true,
   "source": "./src",
   "destination": "./docs",
   "title": "Collision2D",
