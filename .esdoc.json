@@ -1,0 +1,9 @@
+{
+  "source": "./src",
+  "destination": "./docs",
+  "title": "Collision2D",
+  "test": {
+    "source": "./test",
+    "type": "mocha"
+  }
+}
