@@ -15,6 +15,10 @@
   ],
   "author": "Richard Marks <ccpsceo@gmail.com> (http://www.ccpssolutions.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RichardMarks/Collision2D.git"
+  },
   "devDependencies": {
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0",
@@ -24,6 +28,6 @@
     "chai": "^3.5.0",
     "esdoc": "^0.4.5",
     "eslint": "^2.1.0",
-    "mocha": "^2.4.5",
+    "mocha": "^2.4.5"
   }
 }
