@@ -214,6 +214,8 @@ class Collider {
     this._alphaTestingContext = this._alphaTestingCanvas.getContext('2d');
     this._alphaTestingContext.width = this._width;
     this._alphaTestingContext.height = this._height;
+
+    this._globalPosition = { x: 0, y: 0 };
   }
 
   /**
@@ -246,10 +248,14 @@ class Collider {
    * @type {number}
    */
   get x() {
+    let xPos = 0;
     if (this._type === CIRCLE_COLLIDER_TYPE) {
-      return this._displayObject.x + this._radius - this._pivot.x;
+      xPos = this._displayObject.x + this._radius - this._pivot.x;
+    } else {
+      xPos = this._displayObject.x - this._pivot.x;
     }
-    return this._displayObject.x - this._pivot.x;
+    this._displayObject.localToGlobal(xPos, this._displayObject.y, this._globalPosition);
+    return this._globalPosition.x;
   }
 
   /**
@@ -257,10 +263,14 @@ class Collider {
    * @type {number}
    */
   get y() {
+    let yPos = 0;
     if (this._type === CIRCLE_COLLIDER_TYPE) {
-      return this._displayObject.y + this._radius - this._pivot.y;
+      yPos = this._displayObject.y + this._radius - this._pivot.y;
+    } else {
+      yPos = this._displayObject.y - this._pivot.y;
     }
-    return this._displayObject.y - this._pivot.y;
+    this._displayObject.localToGlobal(this._displayObject.x, yPos, this._globalPosition);
+    return this._globalPosition.y;
   }
 
   /**
