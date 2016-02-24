@@ -248,13 +248,11 @@ class Collider {
    * @type {number}
    */
   get x() {
-    let xPos = 0;
+    let xPos = this._displayObject.x - this._pivot.x;
     if (this._type === CIRCLE_COLLIDER_TYPE) {
-      xPos = this._displayObject.x + this._radius - this._pivot.x;
-    } else {
-      xPos = this._displayObject.x - this._pivot.x;
+      xPos += this._radius;
     }
-    this._displayObject.localToGlobal(xPos, this._displayObject.y, this._globalPosition);
+    this._displayObject.parent.localToGlobal(xPos, this._displayObject.y - this._pivot.y, this._globalPosition);
     return this._globalPosition.x;
   }
 
@@ -263,13 +261,11 @@ class Collider {
    * @type {number}
    */
   get y() {
-    let yPos = 0;
+    let yPos = this._displayObject.y - this._pivot.y;
     if (this._type === CIRCLE_COLLIDER_TYPE) {
-      yPos = this._displayObject.y + this._radius - this._pivot.y;
-    } else {
-      yPos = this._displayObject.y - this._pivot.y;
+      yPos += this._radius;
     }
-    this._displayObject.localToGlobal(this._displayObject.x, yPos, this._globalPosition);
+    this._displayObject.parent.localToGlobal(this._displayObject.x - this._pivot.x, yPos, this._globalPosition);
     return this._globalPosition.y;
   }
 
