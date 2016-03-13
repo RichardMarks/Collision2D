@@ -1,8 +1,9 @@
-module.exports = {
+{
     "root": true,
     "parser": "babel-eslint",
     "rules": {
-        "indent": 2
+        "indent": [2, 2],
+        "comma-dangle": [2, "always-multiline"]
     },
     "env": {
         "es6": true,
@@ -20,4 +21,4 @@ module.exports = {
         "templateStrings": true,
         "restParams": true,
     }
-};
+}
