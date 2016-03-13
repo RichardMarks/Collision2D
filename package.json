@@ -1,11 +1,21 @@
 {
   "name": "com-ccpssolutions-collision2d",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "A 2D collision detection library for modern HTML5 games by Richard Marks.",
   "main": "src/Collision2D.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register",
-    "docs": "esdoc -c .esdoc.json"
+    "build": "webpack --mode=build",
+    "dev": "webpack --progress --colors --watch --mode=dev",
+    "dist": "webpack --mode=dev",
+    "postdist": "webpack --mode=build && npm run sloc && npm run docs",
+    "prebuild": "npm run clean",
+    "predev": "npm run clean",
+    "predist": "npm run clean",
+    "clean": "rm -rf ./lib && npm run nods",
+    "test": "mocha --compilers js:babel-core/register --colors -w ./test/**/*.spec.js",
+    "docs": "esdoc -c .esdoc.json",
+    "nods": "find ./ -name '.DS_Store' -depth -delete",
+    "sloc": "sloc --keys source,comment src/"
   },
   "keywords": [
     "collision",
@@ -22,12 +32,17 @@
   "devDependencies": {
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-transform-runtime": "^6.5.2",
     "babel-preset-es2015": "^6.5.0",
     "babel-register": "^6.5.2",
     "chai": "^3.5.0",
     "esdoc": "^0.4.5",
     "eslint": "^2.1.0",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "sloc": "^0.1.10",
+    "webpack": "^1.12.14",
+    "yargs": "^4.2.0"
   }
 }

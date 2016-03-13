@@ -28,6 +28,8 @@ function testPixels(aPixels, bPixels, imageOverlapWidth) {
 }
 
 const alphaTestingCanvas = document.createElement('canvas');
+alphaTestingCanvas.width = window.innerWidth;
+alphaTestingCanvas.height = window.innerHeight;
 const alphaTestingCtx = alphaTestingCanvas.getContext('2d');
 
 function getPixelDataFromCollider(collider, x, y, w, h) {

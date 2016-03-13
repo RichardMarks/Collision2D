@@ -1,4 +1,4 @@
 {
   "presets": ["es2015"],
-  "plugins": ["transform-runtime"]
+  "plugins": ["babel-plugin-add-module-exports", "transform-runtime"]
 }

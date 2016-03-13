@@ -36,4 +36,4 @@ import {fullAPI as c2d} from 'com-ccpssolutions-collision2d';
 ```
 You now have access to everything in Collision2D.
 
-> Version 1.2 - last updated Feb 19, 2016
+> Version 2.0 - last updated Mar 13, 2016
