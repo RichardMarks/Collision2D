@@ -12,8 +12,5 @@ import { collidedBox } from './BoxCollision';
  * @return {boolean} - true if the the objects collided, false if they did not
  */
 export function collidedCircle(a, b) {
-  if (!collidedBox(a, b)) {
-    return false;
-  }
-  return pointInsideCircle(b.x, b.y, a, a.radius + b.radius);
+  return pointInsideCircle(b.circle.x, b.circle.y, a.circle, a.radius + b.radius);
 }

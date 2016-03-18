@@ -90,33 +90,44 @@ const regions = {
 export function collidedCircleRect(circle, rect) {
   let region = regions.UNKNOWN;
 
+  const boundingCircle = circle.circle;
+
   // find voronoi region of the circle
-  if (circle.y < rect.top) {
+  if (boundingCircle.y < rect.top) {
     // above the rectangle top
     // which of top left, top center, or top right?
     region = regions.TOP_CENTER;
-    if (circle.x < rect.left) {
+    if (boundingCircle.x < rect.left) {
       region = regions.TOP_LEFT;
-    } else if (circle.x > rect.right) {
+    } else if (boundingCircle.x > rect.right) {
       region = regions.TOP_RIGHT;
     }
-  } else if (circle.y > rect.bottom) {
+  } else if (boundingCircle.y > rect.bottom) {
     // below rectangle bottom
     // which of bottom left, bottom center, or bottom right?
     region = regions.BOTTOM_CENTER;
-    if (circle.x < rect.left) {
+    if (boundingCircle.x < rect.left) {
       region = regions.BOTTOM_LEFT;
-    } else if (circle.x > rect.right) {
+    } else if (boundingCircle.x > rect.right) {
       region = regions.BOTTOM_RIGHT;
     }
   } else {
     // must be in a central position
     // left center or right center?
     region = regions.RIGHT_CENTER;
-    if (circle.x < rect.left) {
+    if (circle.right < rect.left) {
       region = regions.LEFT_CENTER;
     }
   }
+
+  circle.region = region;
+  const circlesRect = {
+    left: boundingCircle.left,
+    top: boundingCircle.top,
+    right:boundingCircle.right,
+    bottom:boundingCircle.bottom,
+  };
+  circle.circlesRect = circlesRect;
 
   // handle central regions as a simple box collision
   const found = [
@@ -126,7 +137,7 @@ export function collidedCircleRect(circle, rect) {
     regions.RIGHT_CENTER,
   ].find(checkRegion => region === checkRegion);
   if (found) {
-    if (collidedBox(circle, rect)) {
+    if (collidedBox(circlesRect, rect)) {
       return true;
     }
   }
@@ -148,7 +159,7 @@ export function collidedCircleRect(circle, rect) {
     x = rect.right;
     y = rect.bottom;
   }
-  if (pointInsideCircle(x, y, circle, circle.radius)) {
+  if (pointInsideCircle(x, y, boundingCircle, circle.radius)) {
     return true;
   }
   return false;

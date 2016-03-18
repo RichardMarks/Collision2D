@@ -1,6 +1,6 @@
 {
-  "name": "com-ccpssolutions-collision2d",
-  "version": "2.0.0",
+  "name": "Collision2D",
+  "version": "2.1.0",
   "description": "A 2D collision detection library for modern HTML5 games by Richard Marks.",
   "main": "src/Collision2D.js",
   "scripts": {

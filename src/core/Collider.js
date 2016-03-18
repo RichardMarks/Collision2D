@@ -48,6 +48,9 @@ export class Collider {
     this._displayObject.__c2dCollider = this;
     this._boundingBox = new BoundingBox();
     this._boundingCircle = new BoundingCircle();
+    this._previousWidth = 0;
+    this._previousHeight = 0;
+    this._needRadius = true;
     this.update();
   }
 
@@ -60,7 +63,16 @@ export class Collider {
     this._y = this._matrix.ty;
     this._width = this._scaleTransformX * this._bounds.width;
     this._height = this._scaleTransformY * this._bounds.height;
-    this._radius = (Math.max(this._width, this._height) / 2.0000013464106603) | 0;
+    if (this._width !== this._previousWidth || this._height !== this._previousHeight) {
+      this._needRadius = true;
+    }
+    // radius = 1/2 * sqrt(a^2+b^2)
+    if (this._needRadius) {
+      this._radius = (Math.sqrt((this._width * this._width + this._height * this._height)) * 0.5) | 0;
+      this._needRadius = false;
+      this._previousWidth = this._width;
+      this._previousHeight = this._height;
+    }
 
     this._boundingBox.x = this._x;
     this._boundingBox.y = this._y;
