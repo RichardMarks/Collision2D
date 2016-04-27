@@ -6,14 +6,22 @@
 A small ES6 API for detecting 2D collisions between objects.
 
 ## What kind of collision testing does Collision2D support?
-* Rectangle against Rectangle
-* Circle against Circle
-* Rectangle against Circle
+* Rectangle vs Rectangle
+* Circle vs Circle
+* Rectangle vs Circle
 * Alpha (pixel perfect)
+  * Alpha vs Rectangle
+  * Alpha vs Circle
+  * Alpha vs Alpha
 
 ## How do I use Collision2D?
+Install into your project with
+```
+npm install c2d --save-dev
+```
+Create colliders and test for collisions between two of them. Could not be any easier.
 ```javascript
-import {api as c2d} from 'com-ccpssolutions-collision2d';
+import {api as c2d} from 'c2d';
 
 // create colliders
 // displayObject should be an EaselJS DisplayObject instance
@@ -32,8 +40,8 @@ if (objectsCollided) {
 There are more functions available in Collision2D for advanced users.
 If you want to use the full API, simply change your import to the following
 ```javascript
-import {fullAPI as c2d} from 'com-ccpssolutions-collision2d';
+import {fullAPI as c2d} from 'c2d';
 ```
 You now have access to everything in Collision2D.
 
-> Version 2.0 - last updated Mar 13, 2016
+> Version 2.2 - last updated Apr 27, 2016
