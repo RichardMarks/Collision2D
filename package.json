@@ -1,9 +1,10 @@
 {
-  "name": "Collision2D",
-  "version": "2.1.0",
+  "name": "c2d",
+  "version": "2.2.0",
   "description": "A 2D collision detection library for modern HTML5 games by Richard Marks.",
-  "main": "src/Collision2D.js",
+  "main": "lib/Collision2D.2.2.0.min.js",
   "scripts": {
+    "prepublish": "npm run dist",
     "build": "webpack --mode=build",
     "dev": "webpack --progress --colors --watch --mode=dev",
     "dist": "webpack --mode=dev",
