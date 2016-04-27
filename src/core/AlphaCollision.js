@@ -5,6 +5,12 @@
 import { intersection } from './Math';
 import { collidedBox } from './BoxCollision';
 
+import {
+  BOX_COLLIDER_TYPE,
+  CIRCLE_COLLIDER_TYPE,
+  ALPHA_COLLIDER_TYPE,
+} from './ColliderTypes';
+
 function getPointOfCollision(pixelIndex, columnCount) {
   return {
     x: (pixelIndex % columnCount) | 0,
@@ -32,7 +38,31 @@ alphaTestingCanvas.width = window.innerWidth;
 alphaTestingCanvas.height = window.innerHeight;
 const alphaTestingCtx = alphaTestingCanvas.getContext('2d');
 
-function getPixelDataFromCollider(collider, x, y, w, h) {
+function getPixelDataFromBoxCollider(collider, x, y, w, h) {
+  alphaTestingCtx.clearRect(0, 0, alphaTestingCanvas.width, alphaTestingCanvas.height);
+  alphaTestingCtx.save();
+  // alphaTestingCtx.scale(collider.scaleX, collider.scaleY);
+  alphaTestingCtx.fillStyle = 'red';
+  alphaTestingCtx.fillRect(0, 0, collider.box.width, collider.box.height);
+  alphaTestingCtx.restore();
+  const imageData = alphaTestingCtx.getImageData(x, y, w, h);
+  return imageData;
+}
+
+function getPixelDataFromCircleCollider(collider, x, y, w, h) {
+  alphaTestingCtx.clearRect(0, 0, alphaTestingCanvas.width, alphaTestingCanvas.height);
+  alphaTestingCtx.save();
+  // alphaTestingCtx.scale(collider.scaleX, collider.scaleY);
+  alphaTestingCtx.fillStyle = 'red';
+  alphaTestingCtx.beginPath();
+  alphaTestingCtx.arc(collider.circle.radius, collider.circle.radius, collider.circle.radius, 0, Math.PI * 2);
+  alphaTestingCtx.fill();
+  alphaTestingCtx.restore();
+  const imageData = alphaTestingCtx.getImageData(x, y, w, h);
+  return imageData;
+}
+
+function getPixelDataFromAlphaCollider(collider, x, y, w, h) {
   const displayObject = collider.displayObject;
   alphaTestingCtx.clearRect(0, 0, alphaTestingCanvas.width, alphaTestingCanvas.height);
   alphaTestingCtx.save();
@@ -44,14 +74,76 @@ function getPixelDataFromCollider(collider, x, y, w, h) {
   return imageData;
 }
 
-function alphaCollisionTest(a, b) {
-  if (!collidedBox(a, b)) {
-    return false;
+function getPixelDataFromCollider(collider, x, y, w, h) {
+  // return getPixelDataFromAlphaCollider(collider, x, y, w, h);
+  if (collider.type === BOX_COLLIDER_TYPE) {
+    return getPixelDataFromBoxCollider(collider, x, y, w, h);
+  } else if (collider.type === CIRCLE_COLLIDER_TYPE) {
+    return getPixelDataFromCircleCollider(collider, x, y, w, h);
+  } else if (collider.type === ALPHA_COLLIDER_TYPE) {
+    return getPixelDataFromAlphaCollider(collider, x, y, w, h);
   }
+}
+
+function getIntersection(a, b) {
+  // if neither a nor b are circle colliders
+  // perform normal box collision intersection test
+  if (a.type !== CIRCLE_COLLIDER_TYPE && b.type !== CIRCLE_COLLIDER_TYPE) {
+    if (!collidedBox(a, b)) {
+      return false;
+    }
+    const overlap = intersection(a, b);
+    if (!overlap) {
+      return false;
+    }
+    return overlap;
+  }
+
+  if (a.type === CIRCLE_COLLIDER_TYPE) {
+    // a is circle collider
+    const circle = a.circle;
+    const aBox = {
+      left: circle.left,
+      top: circle.top,
+      right: circle.right,
+      bottom: circle.bottom,
+    };
+    if (!collidedBox(aBox, b)) {
+      return false;
+    }
+    const overlap = intersection(aBox, b);
+    if (!overlap) {
+      return false;
+    }
+    return overlap;
+  } else {
+    // b is circle collider
+    const circle = b.circle;
+    const bBox = {
+      left: circle.left,
+      top: circle.top,
+      right: circle.right,
+      bottom: circle.bottom,
+    };
+    if (!collidedBox(a, bBox)) {
+      return false;
+    }
+    const overlap = intersection(a, bBox);
+    if (!overlap) {
+      return false;
+    }
+    return overlap;
+  }
+}
+
+function alphaCollisionTest(a, b) {
+  // if (!collidedBox(a, b)) {
+  //   return false;
+  // }
 
   // objects collided but they may not be overlapping (edge collision)
   // get overlap to find out
-  const overlap = intersection(a, b);
+  const overlap = getIntersection(a, b); // intersection(a, b);
   if (!overlap) {
     return false;
   }
