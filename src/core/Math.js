@@ -12,11 +12,13 @@ import { BoundingBox } from './BoundingBox';
  */
 export function intersection(a, b) {
   const left = Math.max(a.left, b.left);
-  const top = Math.max(a.top, b.top);
   const right = Math.min(a.right, b.right);
-  const bottom = Math.min(a.bottom, b.bottom);
-  if (right > left && bottom > top) {
-    return new BoundingBox(left, top, right - left, bottom - top);
+  if (right > left) {
+    const top = Math.max(a.top, b.top);
+    const bottom = Math.min(a.bottom, b.bottom);
+    if (bottom > top) {
+      return new BoundingBox(left, top, right - left, bottom - top);
+    }
   }
   return null;
 }
