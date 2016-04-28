@@ -164,3 +164,13 @@ export function collidedCircleRect(circle, rect) {
   }
   return false;
 }
+
+/**
+ * checks if box collider and a circle collider collide
+ * @param {Collider} rect - collider instance with type as BOX_COLLIDER to test against
+ * @param {Collider} circle - collider instance with type as CIRCLE_COLLIDER to test
+ * @return {boolean} - true if the the objects collided, false if they did not
+ */
+export function collidedRectCircle(rect, circle) {
+  return collidedCircleRect(circle, rect);
+}
