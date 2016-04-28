@@ -3,7 +3,6 @@
 // Licensed under MIT. Copyright 2016, Richard Marks
 
 import { pointInsideCircle } from './Math';
-import { collidedBox } from './BoxCollision';
 
 /**
  * simple circle vs circle collision test
