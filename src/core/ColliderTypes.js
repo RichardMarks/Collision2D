@@ -5,8 +5,12 @@
 export class ColliderType {
   constructor(id) {
     this._symbol = Symbol(id);
+    this._id = id;
   }
   get symbol() { return this._symbol; }
+  toString() {
+    return `ColliderType[${this._id}]`;
+  }
 }
 
 export const BOX_COLLIDER_TYPE = new ColliderType('Collision2D.BoxCollider');
