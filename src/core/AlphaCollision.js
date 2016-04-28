@@ -3,7 +3,6 @@
 // Licensed under MIT. Copyright 2016, Richard Marks
 
 import { intersection } from './Math';
-import { collidedBox } from './BoxCollision';
 
 import {
   BOX_COLLIDER_TYPE,
@@ -74,76 +73,40 @@ function getPixelDataFromAlphaCollider(collider, x, y, w, h) {
   return imageData;
 }
 
+const getPixelDataMatrix = {
+  [`${BOX_COLLIDER_TYPE}`]: getPixelDataFromBoxCollider,
+  [`${CIRCLE_COLLIDER_TYPE}`]: getPixelDataFromCircleCollider,
+  [`${ALPHA_COLLIDER_TYPE}`]: getPixelDataFromAlphaCollider,
+};
 function getPixelDataFromCollider(collider, x, y, w, h) {
-  // return getPixelDataFromAlphaCollider(collider, x, y, w, h);
-  if (collider.type === BOX_COLLIDER_TYPE) {
-    return getPixelDataFromBoxCollider(collider, x, y, w, h);
-  } else if (collider.type === CIRCLE_COLLIDER_TYPE) {
-    return getPixelDataFromCircleCollider(collider, x, y, w, h);
-  } else if (collider.type === ALPHA_COLLIDER_TYPE) {
-    return getPixelDataFromAlphaCollider(collider, x, y, w, h);
-  }
+  return getPixelDataMatrix[collider.type](collider, x, y, w, h);
 }
 
-function getIntersection(a, b) {
-  // if neither a nor b are circle colliders
-  // perform normal box collision intersection test
-  if (a.type !== CIRCLE_COLLIDER_TYPE && b.type !== CIRCLE_COLLIDER_TYPE) {
-    if (!collidedBox(a, b)) {
-      return false;
-    }
-    const overlap = intersection(a, b);
-    if (!overlap) {
-      return false;
-    }
-    return overlap;
-  }
+// bringing 250+ operations down to ~16 operations!
 
-  if (a.type === CIRCLE_COLLIDER_TYPE) {
-    // a is circle collider
-    const circle = a.circle;
-    const aBox = {
-      left: circle.left,
-      top: circle.top,
-      right: circle.right,
-      bottom: circle.bottom,
-    };
-    if (!collidedBox(aBox, b)) {
-      return false;
-    }
-    const overlap = intersection(aBox, b);
-    if (!overlap) {
-      return false;
-    }
-    return overlap;
-  } else {
-    // b is circle collider
-    const circle = b.circle;
-    const bBox = {
-      left: circle.left,
-      top: circle.top,
-      right: circle.right,
-      bottom: circle.bottom,
-    };
-    if (!collidedBox(a, bBox)) {
-      return false;
-    }
-    const overlap = intersection(a, bBox);
-    if (!overlap) {
-      return false;
-    }
-    return overlap;
-  }
+function getCircleIntersection(a, b) { return intersection(a.circle, b.circle); }
+function getCircleRectIntersection(a, b) { return intersection(a.circle, b); }
+function getRectCircleIntersection(a, b) { return intersection(a, b.circle); }
+
+const intersectionMatrix = {
+  [`${ALPHA_COLLIDER_TYPE}vs${ALPHA_COLLIDER_TYPE}`]: intersection,
+  [`${ALPHA_COLLIDER_TYPE}vs${CIRCLE_COLLIDER_TYPE}`]: getRectCircleIntersection,
+  [`${ALPHA_COLLIDER_TYPE}vs${BOX_COLLIDER_TYPE}`]: intersection,
+  [`${CIRCLE_COLLIDER_TYPE}vs${CIRCLE_COLLIDER_TYPE}`]: getCircleIntersection,
+  [`${CIRCLE_COLLIDER_TYPE}vs${BOX_COLLIDER_TYPE}`]: getCircleRectIntersection,
+  [`${CIRCLE_COLLIDER_TYPE}vs${ALPHA_COLLIDER_TYPE}`]: getCircleRectIntersection,
+  [`${BOX_COLLIDER_TYPE}vs${BOX_COLLIDER_TYPE}`]: intersection,
+  [`${BOX_COLLIDER_TYPE}vs${CIRCLE_COLLIDER_TYPE}`]: getRectCircleIntersection,
+  [`${BOX_COLLIDER_TYPE}vs${ALPHA_COLLIDER_TYPE}`]: intersection,
+};
+
+function getIntersection(a, b) {
+  return intersectionMatrix[`${a.type}vs${b.type}`](a, b);
 }
 
 function alphaCollisionTest(a, b) {
-  // if (!collidedBox(a, b)) {
-  //   return false;
-  // }
-
-  // objects collided but they may not be overlapping (edge collision)
-  // get overlap to find out
-  const overlap = getIntersection(a, b); // intersection(a, b);
+  // get overlap to find out if objects collided
+  const overlap = getIntersection(a, b);
   if (!overlap) {
     return false;
   }
@@ -176,8 +139,6 @@ function alphaCollisionTest(a, b) {
   const aImgData = getPixelDataFromCollider(a, srcAX, srcAY, srcAW, srcAH);
   const bImgData = getPixelDataFromCollider(b, srcBX, srcBY, srcBW, srcBH);
 
-  // const aImgData = a.imgData(overlap.x - a.x, overlap.y - a.y, overlap.width, overlap.height);
-  // const bImgData = b.imgData(overlap.x - b.x, overlap.y - b.y, overlap.width, overlap.height);
   a.overlapImageData = aImgData;
   b.overlapImageData = bImgData;
   const aPixels = aImgData.data;
