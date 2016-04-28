@@ -21,5 +21,10 @@
         "classes": true,
         "templateStrings": true,
         "restParams": true,
+    },
+    "globals": {
+      "describe": true,
+      "it": true,
+      "sinon": true,
     }
 }
