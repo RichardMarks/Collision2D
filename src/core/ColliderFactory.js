@@ -22,6 +22,12 @@ export class ColliderFactory {
    * @returns {BoxCollider} collider instance set as a box collider
    */
   static box({displayObject, width, height}) { // eslint-disable-line no-unused-vars
+    if (width) {
+      window.console.warn('[deprecated parameter width] Collision2D.BoxCollider no longer supports a user-specified width parameter.');
+    }
+    if (height) {
+      window.console.warn('[deprecated parameter height] Collision2D.BoxCollider no longer supports a user-specified height parameter.');
+    }
     const collider = new BoxCollider(displayObject);
     return collider;
   }
@@ -34,6 +40,9 @@ export class ColliderFactory {
    * @returns {Collider} collider instance set as a circle collider
    */
   static circle({displayObject, radius}) { // eslint-disable-line no-unused-vars
+    if (radius) {
+      window.console.warn('[deprecated parameter radius] Collision2D.CircleCollider no longer supports a user-specified radius parameter.');
+    }
     const collider = new CircleCollider(displayObject);
     return collider;
   }

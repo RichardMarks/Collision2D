@@ -8,7 +8,9 @@
     "env": {
         "es6": true,
         "browser": true,
-        "node": true
+        "node": true,
+        "mocha": true,
+        "commonjs": true,
     },
     "extends": "eslint:recommended",
     "ecmaFeatures": {
@@ -23,8 +25,13 @@
         "restParams": true,
     },
     "globals": {
-      "describe": true,
-      "it": true,
-      "sinon": true,
+      "describe": false,
+      "it": false,
+      "sinon": false,
+      "beforeEach": false,
+      "afterEach": false,
+      "before": false,
+      "after": false,
+      "createjs": false,
     }
 }

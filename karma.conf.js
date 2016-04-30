@@ -2,6 +2,7 @@
 // Generated on Thu Apr 28 2016 11:53:40 GMT-0500 (CDT)
 var webpackConfig = require('./webpack.config.js');
 webpackConfig.entry = {};
+webpackConfig.module.loaders[0].query = { plugins: ['babel-plugin-rewire'] };
 
 module.exports = function(config) {
   config.set({
@@ -10,7 +11,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'sinon', 'chai-as-promised', 'sinon-chai'],
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -20,12 +21,14 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './tests.webpack.js': ['webpack'],
+      './vendor/*.js': ['webpack'],
+      './tests.webpack.js': ['webpack', 'sourcemap'],
       './test/**/*.spec.js': ['webpack']
     },
 
     // list of files / patterns to load in the browser
     files: [
+      './vendor/*.js',
       './tests.webpack.js',
       './test/**/*.spec.js'
     ],
@@ -37,6 +40,11 @@ module.exports = function(config) {
     webpack: webpackConfig,
     webpackMiddleware: {
       noInfo: true,
+    },
+
+    client: {
+      captureConsole: true,
+      clearContext: false,
     },
 
     // web server port
