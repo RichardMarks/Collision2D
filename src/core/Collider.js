@@ -19,7 +19,30 @@ import {
   ALPHA_COLLIDER_TYPE,
 } from './ColliderTypes';
 
+let inscribedBoundingCircle = true;
+export function useInscribedBoundingCircle() { inscribedBoundingCircle = true; }
+export function useCircumscribedBoundingCircle() { inscribedBoundingCircle = false; }
+
+let getRadius = null;
+function getInscribedRadius() {
+  return (Math.max(this._width, this._height) * 0.5) | 0;
+}
+
+function getCircumscribedRadius() {
+  return (Math.sqrt((this._width * this._width + this._height * this._height)) * 0.5) | 0;
+}
+
 export class Collider {
+
+  /**
+   * colliders created after calling this function will have an inscribed bounding circle radius
+   */
+  static useInscribedBoundingCircle() { useInscribedBoundingCircle(); }
+
+  /**
+   * colliders created after calling this function will have a circumscribed bounding circle radius
+   */
+  static useCircumscribedBoundingCircle() { useCircumscribedBoundingCircle(); }
 
   /**
    * checks if a collider is a box collider
@@ -48,6 +71,13 @@ export class Collider {
     this._displayObject.__c2dCollider = this;
     this._boundingBox = new BoundingBox();
     this._boundingCircle = new BoundingCircle();
+
+    if (inscribedBoundingCircle) {
+      getRadius = getInscribedRadius.bind(this);
+    } else {
+      getRadius = getCircumscribedRadius.bind(this);
+    }
+
     this.update();
   }
 
@@ -60,9 +90,8 @@ export class Collider {
     this._y = this._matrix.ty;
     this._width = this._scaleTransformX * this._bounds.width;
     this._height = this._scaleTransformY * this._bounds.height;
-    // radius = 1/2 * sqrt(a^2+b^2)
-    this._radius = (Math.sqrt((this._width * this._width + this._height * this._height)) * 0.5) | 0;
-    
+    this._radius = getRadius();
+
     this._boundingBox.x = this._x;
     this._boundingBox.y = this._y;
     this._boundingBox.width = this._width;
