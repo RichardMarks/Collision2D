@@ -1,6 +1,6 @@
 {
   "name": "c2d",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A 2D collision detection library for modern HTML5 games by Richard Marks.",
   "main": "lib/Collision2D.2.2.0.min.js",
   "scripts": {
