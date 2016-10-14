@@ -32,38 +32,40 @@ function getCircumscribedRadius() {
   return (Math.sqrt((this._width * this._width + this._height * this._height)) * 0.5) | 0;
 }
 
-export class Collider {
-
+export const colliderUtil = {
   /**
    * colliders created after calling this function will have an inscribed bounding circle radius
    */
-  static useInscribedBoundingCircle() { useInscribedBoundingCircle(); }
+  useInscribedBoundingCircle,
 
   /**
    * colliders created after calling this function will have a circumscribed bounding circle radius
    */
-  static useCircumscribedBoundingCircle() { useCircumscribedBoundingCircle(); }
+  useCircumscribedBoundingCircle,
 
   /**
    * checks if a collider is a box collider
    * @param {Collider} collider - collider to check
    * @return {boolean} - true if the collider is a box collider
    */
-  static isBox(collider) { return collider.type === BOX_COLLIDER_TYPE; }
+  isBox(collider) { return collider.type === BOX_COLLIDER_TYPE; },
 
   /**
    * checks if a collider is a circle collider
    * @param {Collider} collider - collider to check
    * @return {boolean} - true if the collider is a circle collider
    */
-  static isCircle(collider) { return collider.type === CIRCLE_COLLIDER_TYPE; }
+  isCircle(collider) { return collider.type === CIRCLE_COLLIDER_TYPE; },
 
   /**
    * checks if a collider is an alpha collider
    * @param {Collider} collider - collider to check
    * @return {boolean} - true if the collider is an alpha collider
    */
-  static isAlpha(collider) { return collider.type === ALPHA_COLLIDER_TYPE; }
+  isAlpha(collider) { return collider.type === ALPHA_COLLIDER_TYPE; },
+};
+
+export class Collider {
 
   constructor(displayObject) {
     this._type = null;

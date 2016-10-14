@@ -33,7 +33,7 @@ describe('Collision2D.core.Collider', () => {
         _y: 20,
         _width: 60,
         _height: 80,
-        _radius: 50,
+        _radius: 40,
       });
       expect(collider).to.have.property('_boundingBox').that.is.an.instanceOf(BoundingBox);
       expect(collider).to.have.property('_boundingCircle').that.is.an.instanceOf(BoundingCircle);
